@@ -1,6 +1,6 @@
 package ui
 
-import datamodel.ChartDataModel
+import datamodel.*
 import javafx.geometry.Side
 import javafx.scene.Cursor
 import javafx.scene.chart.NumberAxis
@@ -17,10 +17,11 @@ private const val ZOOM_FACTOR_X = 0.025
 /** Is necessary to display axis marks in more convenient way */
 private val tickLabelConverter = object : StringConverter<Number>() {
     override fun fromString(s: String): Number = s.toDouble()
-    override fun toString(number: Number): String =
-        BigDecimal.valueOf(number.toDouble())
-            .round(MathContext(2, RoundingMode.HALF_UP))
-            .toString()
+    override fun toString(number: Number): String = try {
+            BigDecimal.valueOf(number.toDouble())
+                .round(MathContext(2, RoundingMode.HALF_UP))
+                .toString()
+    } catch(e: NumberFormatException) { "" }
 }
 
 
@@ -40,10 +41,10 @@ class MathChartView : View() {
 
             seriesList.forEach { series ->
                 when(series.name) {
-                    "Exact Solution" -> series.node?.addClass(Styles.exactSeries)
-                    "Euler Method" -> series.node?.addClass(Styles.eulerSeries)
-                    "Improved Euler Method" -> series.node?.addClass(Styles.improvedEulerSeries)
-                    "Runge Kutta Method" -> series.node?.addClass(Styles.rungeKuttaSeries)
+                    EXACT_SOLUTION_NAME -> series.node?.addClass(Styles.exactSeries)
+                    EULER_METHOD_NAME -> series.node?.addClass(Styles.eulerSeries)
+                    IMPROVED_EULER_METHOD_NAME -> series.node?.addClass(Styles.improvedEulerSeries)
+                    RUNGE_KUTTA_METHOD_NAME -> series.node?.addClass(Styles.rungeKuttaSeries)
                 }
             }
         }
@@ -69,9 +70,7 @@ class MathChartView : View() {
         setOnScroll {
             if (!model.isValid)
                 return@setOnScroll
-
-            val zoomChangeX = it.deltaY * ZOOM_FACTOR_X
-            model.xAxisMaxVal -= zoomChangeX
+            model.xAxisMaxVal -= it.deltaY * ZOOM_FACTOR_X
             when {
                 model.isValid -> model.commit()
                 else -> model.rollback()

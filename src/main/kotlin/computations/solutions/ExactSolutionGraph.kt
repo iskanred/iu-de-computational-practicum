@@ -1,14 +1,13 @@
 package computations.solutions
 
 import computations.XBasedGraph
+import datamodel.EXACT_SOLUTION_NAME
 import kotlin.math.*
 
 class ExactSolutionGraph(x0: Double, y0: Double, N: Int,
-                         xAxisMinVal: Double, xAxisMaxVal: Double, gridStep: Double)
-    : XBasedGraph(N, xAxisMinVal, xAxisMaxVal, gridStep)
-{
-    override val name: String = "Exact Solution"
-    private val constant = (y0 - sin(x0)) / cos(x0)
+                         xAxisMinVal: Double, xAxisMaxVal: Double)
+    : XBasedGraph(N, xAxisMinVal, xAxisMaxVal, x0, y0) {
+    override val name: String = EXACT_SOLUTION_NAME
 
     override fun calculateYs(): DoubleArray {
         val ys = DoubleArray(xs.size)
@@ -17,7 +16,4 @@ class ExactSolutionGraph(x0: Double, y0: Double, N: Int,
         }
         return ys
     }
-
-    /* Exact Solution: y = sin(x) + C * cos(x) */
-    private fun getYValue(x: Double): Double = sin(x) + constant * cos(x)
 }

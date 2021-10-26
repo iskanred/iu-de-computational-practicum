@@ -1,16 +1,20 @@
 package computations.solutions
 
 import computations.XBasedGraph
+import datamodel.EULER_METHOD_NAME
+import datamodel.IMPROVED_EULER_METHOD_NAME
+import datamodel.RUNGE_KUTTA_METHOD_NAME
 import java.lang.IllegalArgumentException
 import kotlin.math.*
 
 abstract class ApproximationMethodGraph(x0: Double, protected val y0: Double, N: Int,
-                                        xAxisMinVal: Double, xAxisMaxVal: Double, protected val gridStep: Double) :
-    XBasedGraph(N, xAxisMinVal, xAxisMaxVal, gridStep)
+                                        xAxisMinVal: Double, xAxisMaxVal: Double) :
+    XBasedGraph(N, xAxisMinVal, xAxisMaxVal, x0, y0)
 {
     init {
-        if (x0 !in (xAxisMinVal-0.0001)..(xAxisMinVal+0.0001))
+        if (x0 !in (xAxisMinVal - 0.000001)..(xAxisMinVal + 0.000001)) {
             throw IllegalArgumentException("For approximation method graphs x0 must be equal to xAxisMinVal")
+        }
     }
 
     /* y' = f(x, y) = sec(x) - y * tan(x) */
@@ -19,16 +23,20 @@ abstract class ApproximationMethodGraph(x0: Double, protected val y0: Double, N:
 
 
 class EulerMethodGraph(x0: Double, y0: Double, N: Int,
-                       xAxisMinVal: Double, xAxisMaxVal: Double, gridStep: Double)
-    : ApproximationMethodGraph(x0, y0, N, xAxisMinVal, xAxisMaxVal, gridStep)
+                       xAxisMinVal: Double, xAxisMaxVal: Double)
+    : ApproximationMethodGraph(x0, y0, N, xAxisMinVal, xAxisMaxVal)
 {
-    override val name: String = "Euler Method"
+    override val name: String = EULER_METHOD_NAME
 
     override fun calculateYs(): DoubleArray {
         val ys = DoubleArray(xs.size)
         ys[0] = y0
 
         for (index in 1 until ys.size) {
+            if (index in exclusionPointsIndices) {
+                ys[index] = getYValue(xs[index])
+                continue
+            }
             // y_i = y_(i-1) + h * f(x_(i-1), y_(i-1))
             ys[index] = ys[index - 1] + gridStep * getFValue(xs[index - 1], ys[index - 1])
         }
@@ -38,16 +46,20 @@ class EulerMethodGraph(x0: Double, y0: Double, N: Int,
 
 
 class ImprovedEulerMethodGraph(x0: Double, y0: Double, N: Int,
-                               xAxisMinVal: Double, xAxisMaxVal: Double, gridStep: Double)
-    : ApproximationMethodGraph(x0, y0, N, xAxisMinVal, xAxisMaxVal, gridStep)
+                               xAxisMinVal: Double, xAxisMaxVal: Double)
+    : ApproximationMethodGraph(x0, y0, N, xAxisMinVal, xAxisMaxVal)
 {
-    override val name = "Improved Euler Method"
+    override val name = IMPROVED_EULER_METHOD_NAME
 
     override fun calculateYs(): DoubleArray {
         val ys = DoubleArray(xs.size)
         ys[0] = y0
 
         for (index in 1 until ys.size) {
+            if (index in exclusionPointsIndices) {
+                ys[index] = getYValue(xs[index])
+                continue
+            }
             val x = xs[index - 1]
             val y = ys[index - 1]
             val h = gridStep
@@ -62,16 +74,20 @@ class ImprovedEulerMethodGraph(x0: Double, y0: Double, N: Int,
 
 
 class RungeKuttaMethodGraph(x0: Double, y0: Double, N: Int,
-                            xAxisMinVal: Double, xAxisMaxVal: Double, gridStep: Double)
-    : ApproximationMethodGraph(x0, y0, N, xAxisMinVal, xAxisMaxVal, gridStep)
+                            xAxisMinVal: Double, xAxisMaxVal: Double)
+    : ApproximationMethodGraph(x0, y0, N, xAxisMinVal, xAxisMaxVal)
 {
-    override val name = "Runge Kutta Method"
+    override val name = RUNGE_KUTTA_METHOD_NAME
 
     override fun calculateYs(): DoubleArray {
         val ys = DoubleArray(xs.size)
         ys[0] = y0
 
         for (index in 1 until ys.size) {
+            if (index in exclusionPointsIndices) {
+                ys[index] = getYValue(xs[index])
+                continue
+            }
             val x = xs[index - 1]
             val y = ys[index - 1]
             val h = gridStep

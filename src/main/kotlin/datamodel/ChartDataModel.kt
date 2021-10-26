@@ -1,12 +1,12 @@
 package datamodel
 
-import javafx.beans.property.SimpleDoubleProperty
 import tornadofx.*
 
 class ChartDataModel : ItemViewModel<ChartData>(SolutionChartData()) {
     val x0 = bind(ChartData::x0Property)
     val y0 = bind(ChartData::y0Property)
     val N = bind(ChartData::NProperty)
+    val NMax = bind(ChartData::NMaxProperty)
 
     val isExactSolutionVisible = bind(ChartData::isExactSolutionVisibleProperty)
     val isEulerMethodVisible = bind(ChartData::isEulerMethodVisibleProperty)
@@ -18,12 +18,11 @@ class ChartDataModel : ItemViewModel<ChartData>(SolutionChartData()) {
     val yAxisMinVal = bind(ChartData::yAxisMinValProperty)
     val yAxisMaxVal = bind(ChartData::yAxisMaxValProperty)
 
-    val xMaxForGlobalError = bind(ChartData::xMaxForGlobalErrorProperty)
+    val X = bind(ChartData::XProperty)
 
     val graphs = bind(ChartData::graphsProperty)
 
-    /** grid step that will shown on the chart */
-    val gridStep = SimpleDoubleProperty(item.computeGridStep())
+    val gridStep = bind(ChartData::gridStepProperty)
 
     /**
      * When input data is changing the grids that are displayed
@@ -32,8 +31,7 @@ class ChartDataModel : ItemViewModel<ChartData>(SolutionChartData()) {
      *  since grids uses grid step to be calculated
      */
     override fun onCommit() {
-        gridStep.value = item.computeGridStep()
-        graphs.value = item.computeGraphs(gridStep.value)
+        item.updateGraphs()
         super.onCommit()
     }
 }

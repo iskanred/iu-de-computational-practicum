@@ -6,6 +6,7 @@ import datamodel.LocalTruncErrorChartData
 import datamodel.SolutionChartData
 import javafx.scene.control.TabPane
 import javafx.scene.layout.ColumnConstraints
+import javafx.scene.layout.RowConstraints
 import javafx.stage.Screen
 import tornadofx.*
 
@@ -16,6 +17,7 @@ class MainView : View("Differential Equations: Computational Practicum by Iskand
     private val inputFormView: InputFormView by inject()
     private val diffEquationInfoView: DiffEquationInfoView by inject()
     private val mathChartView: MathChartView by inject()
+
 
     override val root = vbox {
         // Tabs to select a page

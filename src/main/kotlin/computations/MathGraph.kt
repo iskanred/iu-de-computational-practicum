@@ -3,13 +3,17 @@ package computations
 import javafx.scene.chart.XYChart
 import javafx.scene.layout.StackPane
 import tornadofx.*
+import java.lang.IllegalArgumentException
 
-abstract class MathGraph(N: Int, xAxisMinVal: Double, gridStep: Double)
+abstract class MathGraph(N: Int, xAxisMinVal: Double, xAxisMaxVal: Double)
 {
     /** Name of graph that will be displayed */
     abstract val name: String
+
+    /** Step of discretization */
+    protected val gridStep = (xAxisMaxVal - xAxisMinVal) / N
     /** Indices of points in which y-value is undefined */
-    private val exclusionPointsIndices by lazy { findExclusionPointsIndices() }
+    val exclusionPointsIndices by lazy { findExclusionPointsIndices() }
 
     protected val xs: DoubleArray = DoubleArray(N + 1)
     val ys: DoubleArray by lazy { calculateYs() }
@@ -23,6 +27,9 @@ abstract class MathGraph(N: Int, xAxisMinVal: Double, gridStep: Double)
 
     /** Fill xs */
     init {
+        if (xAxisMinVal >= xAxisMaxVal)
+            throw IllegalArgumentException("min value of x-axis must be less than max value")
+
         xs[0] = xAxisMinVal
         for (index in 1 until xs.size) {
             // x_i = x_(i-1) + h
