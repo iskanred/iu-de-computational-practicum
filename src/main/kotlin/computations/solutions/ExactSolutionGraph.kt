@@ -2,7 +2,6 @@ package computations.solutions
 
 import computations.XBasedGraph
 import datamodel.EXACT_SOLUTION_NAME
-import kotlin.math.*
 
 class ExactSolutionGraph(x0: Double, y0: Double, N: Int,
                          xAxisMinVal: Double, xAxisMaxVal: Double)

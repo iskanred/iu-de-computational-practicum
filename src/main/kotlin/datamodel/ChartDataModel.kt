@@ -6,6 +6,7 @@ class ChartDataModel : ItemViewModel<ChartData>(SolutionChartData()) {
     val x0 = bind(ChartData::x0Property)
     val y0 = bind(ChartData::y0Property)
     val N = bind(ChartData::NProperty)
+    val X = bind(ChartData::XProperty)
     val NMax = bind(ChartData::NMaxProperty)
 
     val isExactSolutionVisible = bind(ChartData::isExactSolutionVisibleProperty)
@@ -17,8 +18,6 @@ class ChartDataModel : ItemViewModel<ChartData>(SolutionChartData()) {
     val xAxisMaxVal = bind(ChartData::xAxisMaxValProperty)
     val yAxisMinVal = bind(ChartData::yAxisMinValProperty)
     val yAxisMaxVal = bind(ChartData::yAxisMaxValProperty)
-
-    val X = bind(ChartData::XProperty)
 
     val graphs = bind(ChartData::graphsProperty)
 

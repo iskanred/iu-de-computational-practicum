@@ -6,7 +6,6 @@ import datamodel.LocalTruncErrorChartData
 import datamodel.SolutionChartData
 import javafx.scene.control.TabPane
 import javafx.scene.layout.ColumnConstraints
-import javafx.scene.layout.RowConstraints
 import javafx.stage.Screen
 import tornadofx.*
 
