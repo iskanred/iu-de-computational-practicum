@@ -1,1 +1,1 @@
-# Differential Equations Course: Computational Practicum
+# Innopolis University Differential Equations Course: Computational Practicum
